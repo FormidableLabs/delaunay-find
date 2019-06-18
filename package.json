@@ -3,22 +3,35 @@
   "version": "0.0.0",
   "description": "Finds the nearest point based on a delaunay diagram",
   "main": "lib/index.js",
-  "module": "src/index.js",
-  "dependencies": {
-    "delaunator": "^2.0.0"
-  },
-  "devDependencies": {
-    "@observablehq/tape": "~0.0.1",
-    "esm": "3",
-    "tape": "4"
-  },
+  "module": "es/index.js",
+  "author": "Formidable Labs",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/FormidableLabs/delaunay-find"
   },
   "scripts": {
-    "test": "tape -r esm 'test/**/*-test.js'"
+    "preversion": "yarn run check",
+    "version": "yarn build",
+    "clean:lib": "rimraf lib",
+    "build:lib": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --copy-files",
+    "clean:es": "rimraf es",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --copy-files",
+    "build": "yarn clean:lib && yarn build:lib && yarn clean:es && yarn build:es",
+    "test": "tape -r esm \"test/**/*-test.js\"",
+    "check": "yarn test"
   },
-  "author": "Formidablelabs",
-  "license": "ISC"
+  "dependencies": {
+    "delaunator": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@observablehq/tape": "~0.0.1",
+    "cross-env": "^5.2.0",
+    "esm": "3",
+    "rimraf": "^2.6.3",
+    "tape": "4"
+  }
 }
