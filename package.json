@@ -19,7 +19,10 @@
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --copy-files",
     "build": "yarn clean:lib && yarn build:lib && yarn clean:es && yarn build:es",
     "test": "yarn build:lib && tape \"test/**/*-test.js\"",
-    "check": "yarn test"
+    "check": "yarn test",
+    "lint:src": "eslint --color src",
+    "lint:test": "eslint --color test",
+    "format": "prettier --write './**/*.js'"
   },
   "dependencies": {
     "delaunator": "^2.0.0"
@@ -29,7 +32,14 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.3.4",
     "@observablehq/tape": "~0.0.1",
+    "babel-eslint": "^6.1.2",
     "cross-env": "^5.2.0",
+    "eslint": "^2.0.0",
+    "eslint-config-formidable": "^2.0.1",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-import": "^2.2.0",
+    "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "tape": "4"
   }
