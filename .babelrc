@@ -3,6 +3,15 @@
   "plugins": [],
   "env": {
     "commonjs": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "loose": true,
+            "modules": "commonjs"
+          }
+        ]
+      ],
       "plugins": [
         ["@babel/transform-modules-commonjs", {
           "strict": false,

@@ -18,16 +18,19 @@
     "clean:es": "rimraf es",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --copy-files",
     "build": "yarn clean:lib && yarn build:lib && yarn clean:es && yarn build:es",
-    "test": "tape -r esm \"test/**/*-test.js\"",
+    "test": "tape -r esm \"test/*-test.js\"",
+    "test:lib": "yarn build:lib && tape -r esm \"test/lib/*-test.js\"",
     "check": "yarn test"
   },
   "dependencies": {
-    "delaunator": "^2.0.0"
+    "delaunator": "^2.0.0",
+    "regenerator-runtime": "^0.13.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/preset-env": "^7.3.4",
     "@observablehq/tape": "~0.0.1",
     "cross-env": "^5.2.0",
     "esm": "3",

@@ -1,5 +1,7 @@
 // From https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js
 import Delaunator from "delaunator";
+// TODO: remove once generator functions have been refactored
+import regeneratorRuntime from "regenerator-runtime";
 
 function pointX(p) {
   return p[0];
