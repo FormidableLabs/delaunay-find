@@ -1,7 +1,5 @@
 // From https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js
 import Delaunator from "delaunator";
-// TODO: remove once generator functions have been refactored
-import regeneratorRuntime from "regenerator-runtime";
 
 function pointX(p) {
   return p[0];
@@ -45,18 +43,26 @@ export default class Delaunay {
       outedges[node0.i] = node1.t;
     } while (node1 !== hull);
   }
-  *neighbors(i) {
+  neighbors(i) {
+    const results = [];
+
     const {inedges, outedges, halfedges, triangles} = this;
     const e0 = inedges[i];
-    if (e0 === -1) return; // coincident point
+    if (e0 === -1) return results; // coincident point
+
     let e = e0;
     do {
-      yield triangles[e];
+      results.push(triangles[e]);
       e = e % 3 === 2 ? e - 2 : e + 1;
-      if (triangles[e] !== i) return; // bad triangulation
+      if (triangles[e] !== i) break; // bad triangulation
       e = halfedges[e];
-      if (e === -1) return yield triangles[outedges[i]];
+      if (e === -1) {
+        results.push(triangles[outedges[i]]);
+        break;
+      }
     } while (e !== e0);
+
+    return results;
   }
   find(x, y, i = 0) {
     if ((x = +x, x !== x) || (y = +y, y !== y)) return -1;

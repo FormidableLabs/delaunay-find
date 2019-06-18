@@ -1,5 +1,5 @@
-var tape = require("@observablehq/tape");
-var Delaunay = require("../lib/index.js").default;
+const tape = require("@observablehq/tape");
+const Delaunay = require("../lib/index.js").default;
 
 tape("Delaunay.from(array)", test => {
   let delaunay = Delaunay.from([[0, 0], [1, 0], [0, 1], [1, 1]]);
