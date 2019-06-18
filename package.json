@@ -1,0 +1,18 @@
+{
+  "name": "delaunay-find",
+  "version": "0.0.0",
+  "description": "Finds the nearest point based on a delaunay diagram",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "dependencies": {
+    "delaunator": "^3.0.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FormidableLabs/delaunay-find"
+  },
+  "scripts": {},
+  "author": "Formidablelabs",
+  "license": "ISC"
+}
