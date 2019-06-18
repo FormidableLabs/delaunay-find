@@ -1,5 +1,5 @@
 // From https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js
-import Delaunator from "delaunator/delaunator.js";
+import Delaunator from "delaunator";
 
 function pointX(p) {
   return p[0];

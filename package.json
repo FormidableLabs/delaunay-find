@@ -5,14 +5,20 @@
   "main": "lib/index.js",
   "module": "src/index.js",
   "dependencies": {
-    "delaunator": "^3.0.0"
+    "delaunator": "^2.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@observablehq/tape": "~0.0.1",
+    "esm": "3",
+    "tape": "4"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/FormidableLabs/delaunay-find"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "tape -r esm 'test/**/*-test.js'"
+  },
   "author": "Formidablelabs",
   "license": "ISC"
 }
