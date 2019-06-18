@@ -1,5 +1,8 @@
 Changes
 =======
+## 0.0.1 (2019-06-18)
+
+First published version! This package is a small subset of `d3-delaunay` that exposes only `Delaunay.from` and `Delaunay.find`. This package publishes transpiled `lib/` and es6 `es/` packages. No polyfills required :)
 
 ## UNRELEASED
 
