@@ -62,7 +62,7 @@ export default class Delaunay {
       }
     } while (e !== e0);
 
-    return results
+    return results;
   }
   find(x, y, i = 0) {
     if ((x = +x, x !== x) || (y = +y, y !== y)) return -1;
