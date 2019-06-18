@@ -3,11 +3,14 @@
   "plugins": [],
   "env": {
     "commonjs": {
-      "plugins": [
-        ["@babel/transform-modules-commonjs", {
-          "strict": false,
-          "allowTopLevelThis": true
-        }]
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "loose": true,
+            "modules": "commonjs"
+          }
+        ]
       ]
     }
   }
