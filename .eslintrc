@@ -1,0 +1,11 @@
+{
+  "extends": ["formidable/configurations/es6", "prettier"],
+  "rules": {
+    "no-bitwise": 0,
+    "func-style": 0,
+    "no-magic-numbers": [
+      "error",
+      { "ignore": [-1, 0, 1, 2, 3] }
+    ]
+  }
+}
