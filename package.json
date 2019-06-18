@@ -3,7 +3,20 @@
   "version": "0.0.0",
   "description": "Finds the nearest point based on a delaunay diagram",
   "main": "lib/index.js",
-  "module": "src/index.js",
+  "module": "es/index.js",
+  "author": "Formidable Labs",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FormidableLabs/delaunay-find"
+  },
+  "scripts": {
+    "preversion": "yarn run check",
+    "version": "yarn build",
+    "build": "echo TODO BUILD",
+    "test": "tape -r esm \"test/**/*-test.js\"",
+    "check": "yarn test"
+  },
   "dependencies": {
     "delaunator": "^2.0.0"
   },
@@ -11,14 +24,5 @@
     "@observablehq/tape": "~0.0.1",
     "esm": "3",
     "tape": "4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/FormidableLabs/delaunay-find"
-  },
-  "scripts": {
-    "test": "tape -r esm 'test/**/*-test.js'"
-  },
-  "author": "Formidablelabs",
-  "license": "ISC"
+  }
 }
