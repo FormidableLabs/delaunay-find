@@ -91,7 +91,7 @@ export default class Delaunay {
       if (dt < dc) {
         dc = dt;
         c = t;
-      };
+      }
     }
     return c;
   }

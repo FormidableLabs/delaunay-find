@@ -19,10 +19,12 @@
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --copy-files",
     "build": "yarn clean:lib && yarn build:lib && yarn clean:es && yarn build:es",
     "test": "yarn build:lib && tape \"test/**/*-test.js\"",
-    "check": "yarn test",
+    "check": "yarn format:ci && yarn lint && yarn test",
     "lint:src": "eslint --color src",
     "lint:test": "eslint --color test",
-    "format": "prettier --write './**/*.js'"
+    "lint": "yarn lint:src && yarn lint:test",
+    "format": "prettier --write './**/*.js'",
+    "format:ci": "prettier --list-different './**/*.js'"
   },
   "dependencies": {
     "delaunator": "^2.0.0"
