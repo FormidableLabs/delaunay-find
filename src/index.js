@@ -9,6 +9,7 @@ function pointY(p) {
   return p[1];
 }
 
+// eslint-disable-next-line max-params
 function flatArray(points, fx, fy, that) {
   const n = points.length;
   const array = new Float64Array(n * 2);
@@ -21,6 +22,7 @@ function flatArray(points, fx, fy, that) {
 }
 
 export default class Delaunay {
+  // eslint-disable-next-line max-statements
   constructor(points) {
     const { halfedges, hull, triangles } = new Delaunator(points);
     this.points = points;
@@ -38,14 +40,16 @@ export default class Delaunay {
     }
 
     // For points on the hull, index both the incoming and outgoing halfedges.
-    let node0,
-      node1 = hull;
+    let node0 = hull;
+    let node1 = hull;
     do {
-      (node0 = node1), (node1 = node1.next);
+      node0 = node1;
+      node1 = node1.next;
       inedges[node1.i] = node0.t;
       outedges[node0.i] = node1.t;
     } while (node1 !== hull);
   }
+
   neighbors(i) {
     const results = [];
 
@@ -67,13 +71,16 @@ export default class Delaunay {
 
     return results;
   }
+
   find(x, y, i = 0) {
+    // eslint-disable-next-line no-self-compare
     if (((x = +x), x !== x) || ((y = +y), y !== y)) return -1;
     const i0 = i;
     let c;
     while ((c = this._step(i, x, y)) >= 0 && c !== i && c !== i0) i = c;
     return c;
   }
+
   _step(i, x, y) {
     const { inedges, points } = this;
     if (inedges[i] === -1) return (i + 1) % (points.length >> 1);
@@ -81,12 +88,16 @@ export default class Delaunay {
     let dc = (x - points[i * 2]) ** 2 + (y - points[i * 2 + 1]) ** 2;
     for (const t of this.neighbors(i)) {
       const dt = (x - points[t * 2]) ** 2 + (y - points[t * 2 + 1]) ** 2;
-      if (dt < dc) (dc = dt), (c = t);
+      if (dt < dc) {
+        dc = dt;
+        c = t;
+      };
     }
     return c;
   }
 }
 
+// eslint-disable-next-line max-params
 Delaunay.from = function(points, fx = pointX, fy = pointY, that) {
   return new Delaunay(flatArray(points, fx, fy, that));
 };
