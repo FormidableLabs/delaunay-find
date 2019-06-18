@@ -22,15 +22,6 @@ function flatArray(points, fx, fy, that) {
   return array;
 }
 
-function* flatIterable(points, fx, fy, that) {
-  let i = 0;
-  for (const p of points) {
-    yield fx.call(that, p, i, points);
-    yield fy.call(that, p, i, points);
-    ++i;
-  }
-}
-
 export default class Delaunay {
   constructor(points) {
     const {halfedges, hull, triangles} = new Delaunator(points);
@@ -88,9 +79,7 @@ export default class Delaunay {
 }
 
 Delaunay.from = function(points, fx = pointX, fy = pointY, that) {
-  return new Delaunay("length" in points
-      ? flatArray(points, fx, fy, that)
-      : Float64Array.from(flatIterable(points, fx, fy, that)));
+  return new Delaunay(flatArray(points, fx, fy, that));
 };
 
 // only public methods will be .from and .find

@@ -11,12 +11,6 @@
             "modules": "commonjs"
           }
         ]
-      ],
-      "plugins": [
-        ["@babel/transform-modules-commonjs", {
-          "strict": false,
-          "allowTopLevelThis": true
-        }]
       ]
     }
   }
