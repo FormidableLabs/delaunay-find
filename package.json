@@ -18,7 +18,7 @@
     "clean:es": "rimraf es",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --copy-files",
     "build": "yarn clean:lib && yarn build:lib && yarn clean:es && yarn build:es",
-    "test:lib": "yarn build:lib && tape \"test/**/*-test.js\"",
+    "test": "yarn build:lib && tape \"test/**/*-test.js\"",
     "check": "yarn test"
   },
   "dependencies": {
