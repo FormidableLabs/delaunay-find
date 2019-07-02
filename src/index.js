@@ -53,7 +53,7 @@ export default class Delaunay {
     this._init(delaunator);
   }
 
-  // eslint-disable-next-line max-statements
+  // eslint-disable-next-line max-statements, complexity
   _init(delaunator) {
     const d = delaunator;
     const points = this.points;
