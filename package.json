@@ -27,7 +27,7 @@
     "format:ci": "prettier --list-different './**/*.js'"
   },
   "dependencies": {
-    "delaunator": "^2.0.0"
+    "delaunator": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

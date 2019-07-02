@@ -9,6 +9,28 @@ function pointY(p) {
   return p[1];
 }
 
+function area(hull, points) {
+  let n = hull.length;
+  let x0;
+  let y0;
+  let x1 = points[2 * hull[n - 1]];
+  let y1 = points[2 * hull[n - 1] + 1]
+  let area = 0;
+
+  for (let i = 0; i < n; i ++) {
+    x0 = x1, y0 = y1;
+    x1 = points[2 * hull[i]];
+    y1 = points[2 * hull[i] + 1];
+    area += y0 * x1 - x0 * y1;
+  }
+
+  return area / 2;
+}
+
+function jitter(x, y, r) {
+  return [x + Math.sin(x + y) * r, y + Math.cos(x - y) * r];
+}
+
 // eslint-disable-next-line max-params
 function flatArray(points, fx, fy, that) {
   const n = points.length;
@@ -22,49 +44,82 @@ function flatArray(points, fx, fy, that) {
 }
 
 export default class Delaunay {
-  // eslint-disable-next-line max-statements
   constructor(points) {
-    const { halfedges, hull, triangles } = new Delaunator(points);
-    this.points = points;
-    this.halfedges = halfedges;
-    this.hull = hull;
-    this.triangles = triangles;
-    const inedges = (this.inedges = new Int32Array(points.length / 2).fill(-1));
-    const outedges = (this.outedges = new Int32Array(points.length / 2).fill(
-      -1
-    ));
+    this._delaunator = new Delaunator(points);
+    this.inedges = new Int32Array(points.length / 2);
+    this._hullIndex = new Int32Array(points.length / 2);
+    this.points = this._delaunator.coords;
+    this._init();
+  }
 
-    // Compute an index from each point to an (arbitrary) incoming halfedge.
-    for (let e = 0, n = halfedges.length; e < n; ++e) {
-      inedges[triangles[e % 3 === 2 ? e - 2 : e + 1]] = e;
+  _init() {
+    const d = this._delaunator;
+    const points = this.points;
+
+    // check for collinear
+    if (d.hull && d.hull.length > 2 && area(d.hull, points) < 1e-10) {
+      this.collinear = Int32Array.from({length: points.length/2}, (_,i) => i)
+        .sort((i, j) => points[2 * i] - points[2 * j] || points[2 * i + 1] - points[2 * j + 1]); // for exact neighbors
+      const e = this.collinear[0];
+      const f = this.collinear[this.collinear.length - 1];
+      const bounds = [ points[2 * e], points[2 * e + 1], points[2 * f], points[2 * f + 1] ];
+      const r = 1e-8 * Math.sqrt((bounds[3] - bounds[1])**2 + (bounds[2] - bounds[0])**2);
+      for (let i = 0, n = points.length / 2; i < n; ++i) {
+        const p = jitter(points[2 * i], points[2 * i + 1], r);
+        points[2 * i] = p[0];
+        points[2 * i + 1] = p[1];
+      }
+      this._delaunator = new Delaunator(points);
     }
 
-    // For points on the hull, index both the incoming and outgoing halfedges.
-    let node0 = hull;
-    let node1 = hull;
-    do {
-      node0 = node1;
-      node1 = node1.next;
-      inedges[node1.i] = node0.t;
-      outedges[node0.i] = node1.t;
-    } while (node1 !== hull);
+    const halfedges = this.halfedges = this._delaunator.halfedges;
+    const hull = this.hull = this._delaunator.hull;
+    const triangles = this.triangles = this._delaunator.triangles;
+    const inedges = this.inedges.fill(-1);
+    const hullIndex = this._hullIndex.fill(-1);
+
+    // Compute an index from each point to an (arbitrary) incoming halfedge
+    // Used to give the first neighbor of each point; for this reason,
+    // on the hull we give priority to exterior halfedges
+    for (let e = 0, n = halfedges.length; e < n; ++e) {
+      const p = triangles[e % 3 === 2 ? e - 2 : e + 1];
+      if (halfedges[e] === -1 || inedges[p] === -1) inedges[p] = e;
+    }
+    for (let i = 0, n = hull.length; i < n; ++i) {
+      hullIndex[hull[i]] = i;
+    }
+
+    // degenerate case: 1 or 2 (distinct) points
+    if (hull.length <= 2 && hull.length > 0) {
+      this.triangles = new Int32Array(3).fill(-1);
+      this.halfedges = new Int32Array(3).fill(-1);
+      this.triangles[0] = hull[0];
+      this.triangles[1] = hull[1];
+      this.triangles[2] = hull[1];
+      inedges[hull[0]] = 1;
+      if (hull.length === 2) inedges[hull[1]] = 0;
+    }
   }
 
   neighbors(i) {
     const results = [];
 
-    const { inedges, outedges, halfedges, triangles } = this;
+    const { inedges, hull, _hullIndex, halfedges, triangles } = this;
+
     const e0 = inedges[i];
     if (e0 === -1) return results; // coincident point
 
     let e = e0;
+    let p0 = -1;
     do {
-      results.push(triangles[e]);
+      p0 = triangles[e];
+      results.push(p0);
       e = e % 3 === 2 ? e - 2 : e + 1;
       if (triangles[e] !== i) break; // bad triangulation
       e = halfedges[e];
       if (e === -1) {
-        results.push(triangles[outedges[i]]);
+        const p = hull[(_hullIndex[i] + 1) % hull.length];
+        if (p !== p0) results.push(p);
         break;
       }
     } while (e !== e0);
@@ -82,16 +137,13 @@ export default class Delaunay {
   }
 
   _step(i, x, y) {
-    const { inedges, points } = this;
-    if (inedges[i] === -1) return (i + 1) % (points.length >> 1);
+    const {inedges, points} = this;
+    if (inedges[i] === -1 || !points.length) return (i + 1) % (points.length >> 1);
     let c = i;
     let dc = (x - points[i * 2]) ** 2 + (y - points[i * 2 + 1]) ** 2;
     for (const t of this.neighbors(i)) {
       const dt = (x - points[t * 2]) ** 2 + (y - points[t * 2 + 1]) ** 2;
-      if (dt < dc) {
-        dc = dt;
-        c = t;
-      }
+      if (dt < dc) dc = dt, c = t;
     }
     return c;
   }
