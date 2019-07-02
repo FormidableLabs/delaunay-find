@@ -1,6 +1,6 @@
 {
   "name": "delaunay-find",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Finds the nearest point based on a delaunay diagram",
   "main": "lib/index.js",
   "module": "es/index.js",
