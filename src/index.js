@@ -77,7 +77,7 @@ export default class Delaunay {
         points[2 * f + 1]
       ];
       const r =
-        1e-8 *  // eslint-disable-line no-magic-numbers
+        1e-8 * // eslint-disable-line no-magic-numbers
         Math.sqrt((bounds[3] - bounds[1]) ** 2 + (bounds[2] - bounds[0]) ** 2);
       for (let i = 0, n = points.length / 2; i < n; ++i) {
         const p = jitter(points[2 * i], points[2 * i + 1], r);
