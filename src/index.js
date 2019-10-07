@@ -11,14 +11,16 @@ function pointY(p) {
 
 // A triangulation is collinear if all its triangles have a non-null area
 function collinear(d) {
-  const {triangles, coords} = d;
+  const { triangles, coords } = d;
   for (let i = 0; i < triangles.length; i += 3) {
     const a = 2 * triangles[i];
     const b = 2 * triangles[i + 1];
     const c = 2 * triangles[i + 2];
-    const cross = (coords[c] - coords[a]) * (coords[b + 1] - coords[a + 1])
-                - (coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1]);
-    if (cross > 1e-10) { // eslint-disable-line no-magic-numbers
+    const cross =
+      (coords[c] - coords[a]) * (coords[b + 1] - coords[a + 1]) -
+      (coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1]);
+    // eslint-disable-next-line no-magic-numbers
+    if (cross > 1e-10) {
       return false;
     }
   }

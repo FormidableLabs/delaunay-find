@@ -49,9 +49,7 @@ tape("delaunay.find(x, y) with coincident point", test => {
 });
 
 tape("delaunay.find with reported regression", test => {
-  const regressionData = [
-    [100, 17113.1], [100.001, 17113.1], [300, 17113.1]
-  ];
+  const regressionData = [[100, 17113.1], [100.001, 17113.1], [300, 17113.1]];
   const delaunay = Delaunay.from(regressionData);
   test.equal(delaunay.find(300, 17113.1), 2);
 });
