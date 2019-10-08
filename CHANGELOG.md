@@ -1,6 +1,10 @@
 Changes
 =======
 
+## 0.0.4 (2019-10-07)
+
+[#10](https://github.com/FormidableLabs/delaunay-find/pull/10) - Uses a more accurate check for collinear points
+
 ## 0.0.3 (2019-07-02)
 
 [#8](https://github.com/FormidableLabs/delaunay-find/pull/8) - Updates to `delaunator@^4.0.0` and alters behavior for collinear points
