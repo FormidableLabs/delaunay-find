@@ -1,6 +1,10 @@
 Changes
 =======
 
+## 0.0.5 (2019-10-31)
+
+- update lodash for security vulnerability.
+
 ## 0.0.4 (2019-10-07)
 
 [#10](https://github.com/FormidableLabs/delaunay-find/pull/10) - Uses a more accurate check for collinear points
