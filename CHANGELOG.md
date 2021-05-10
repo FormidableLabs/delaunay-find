@@ -1,6 +1,10 @@
 Changes
 =======
 
+## 0.0.6 (2021-05-10)
+
+- update dependencies
+
 ## 0.0.5 (2019-10-31)
 
 - update lodash for security vulnerability.
